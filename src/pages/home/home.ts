@@ -20,7 +20,6 @@ export class HomePage {
     public navCtrl: NavController, 
     public menu: MenuController,
     public auth: AuthService) {
-
   }
 
   ionViewWillEnter() {

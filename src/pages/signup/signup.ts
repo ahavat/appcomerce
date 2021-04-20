@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { CidadeService } from '../../services/domain/cidade.service';
+import { EstadoService } from '../../services/domain/estado.service';
+import { EstadoDTO } from '../../models/estado.dto';
+import { CidadeDTO } from '../../models/cidade.dto';
 
 @IonicPage()
 @Component({
@@ -11,13 +14,17 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class SignupPage {
 
   formGroup: FormGroup;
+  estados: EstadoDTO[];
+  cidades: CidadeDTO[];
 
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    public formbuilder: FormBuilder) {
-      
-      this.formGroup = this.formbuilder.group({
+    public formBuilder: FormBuilder,
+    public cidadeService: CidadeService,
+    public estadoService: EstadoService) {
+
+    this.formGroup = this.formBuilder.group({
       nome: ['Joaquim', [Validators.required, Validators.minLength(5), Validators.maxLength(120)]],
       email: ['joaquim@gmail.com', [Validators.required, Validators.email]],
       tipo : ['1', [Validators.required]],
@@ -33,10 +40,33 @@ export class SignupPage {
       telefone3 : ['', []],
       estadoId : [null, [Validators.required]],
       cidadeId : [null, [Validators.required]]      
-      });
+    });
+  }
+
+  ionViewDidLoad() {
+    this.estadoService.findAll()
+      .subscribe(response => {
+        this.estados = response;
+        this.formGroup.controls.estadoId.setValue(this.estados[0].id);
+        if (this.estados[0].id) {
+          this.updateCidades();
+        }
+      },
+        error => { });
+  }
+
+  updateCidades() {
+    if (this.formGroup.value.estadoId) {
+      this.cidadeService.findAll(this.formGroup.value.estadoId)
+        .subscribe(response => {
+          this.cidades = response;
+          this.formGroup.controls.cidadeId.setValue(null);
+        },
+          error => { });
+    }
   }
 
   signupUser() {
-     console.log('enviou')
+    console.log("enviou o form");
   }
 }
