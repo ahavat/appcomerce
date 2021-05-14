@@ -58,5 +58,8 @@ total() : number {
 goOn() {
   this.navCtrl.setRoot('CategoriasPage')
 }
+checkout() {
+  this.navCtrl.push('PickAddressPage')
+}
 
 }
