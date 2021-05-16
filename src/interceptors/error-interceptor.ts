@@ -37,7 +37,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
                 case 422:
                 this.handle422(errorObj);
-                break
+                break;
 
                 default:
                 this.handleDefaultEror(errorObj);
@@ -101,8 +101,6 @@ export class ErrorInterceptor implements HttpInterceptor {
         return s;
     }
 }
-
-
 
 export const ErrorInterceptorProvider = {
     provide: HTTP_INTERCEPTORS,

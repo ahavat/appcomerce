@@ -20,6 +20,7 @@ export class HomePage {
     public navCtrl: NavController, 
     public menu: MenuController,
     public auth: AuthService) {
+
   }
 
   ionViewWillEnter() {
@@ -33,7 +34,7 @@ export class HomePage {
   ionViewDidEnter() {
     this.auth.refreshToken()
       .subscribe(response => {
-        this.auth.sucessfulLogin(response.headers.get('Authorization'));
+        this.auth.successfulLogin(response.headers.get('Authorization'));
         this.navCtrl.setRoot('CategoriasPage');
       },
       error => {});  
@@ -42,7 +43,7 @@ export class HomePage {
   login() {
     this.auth.authenticate(this.creds)
       .subscribe(response => {
-        this.auth.sucessfulLogin(response.headers.get('Authorization'));
+        this.auth.successfulLogin(response.headers.get('Authorization'));
         this.navCtrl.setRoot('CategoriasPage');
       },
       error => {});    
